@@ -37,7 +37,6 @@ class CalculatorScreen extends StatelessWidget {
               ),
             ),
 
-            // Button Grid
             Container(
               padding: const EdgeInsets.all(8),
               child: Column(
