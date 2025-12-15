@@ -22,22 +22,13 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   List<Widget> getData (int count){
     List <Widget> data = [];
@@ -47,12 +38,15 @@ class _MyHomePageState extends State<MyHomePage> {
       );
       data.add(Text(
         _counter.toString(),
-        style: TextStyle(fontSize: 30, color: Colors.blue),
+        style: TextStyle(fontSize: 30, color: Colors.red),
       ));
-      data.add(Text("ทดสอบ List"));
-      data.add(Text("ทดสอบ List"));
       for (var i = 0; i <= count; i++) {
-        data.add(Text("รอบที่ $i"));
+        var menu = ListTile(title: Text("เมนูที่ $i",
+        style: TextStyle(fontSize: 25, color: Colors.blue),
+        ),
+        subtitle: Text("รายละเอียดเมนูที่ $i")
+        );
+        data.add(menu);
       }
       return data;
   }
@@ -66,16 +60,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
         title: Text(widget.title),
       ),
-      body: Center(
-
-        child: ListView(
-          children: getData(15),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: ListView.builder(
+        itemCount: 20,
+        itemBuilder: (BuildContext context , int index) {
+          return ListTile(
+            title: Text("เมนูที่ ${index + 1}",),
+          );
+        },
       ),
     );
   }
