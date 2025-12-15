@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'foodmenu.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,18 +29,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  List <Foodmenu> menu = [
+    Foodmenu("กุ้งเผา", "500 บาท"),
+    Foodmenu("กระเผาหมูสับ", "50 บาท")
+  ];
 
   List<Widget> getData (int count){
     List <Widget> data = [];
-     data.add(Text(
-      'กดปุ่ม เพิ่มค่า ตัวเลข ',style: TextStyle(fontSize: 20, color: Colors.red),
-      )
-      );
-      data.add(Text(
-        _counter.toString(),
-        style: TextStyle(fontSize: 30, color: Colors.red),
-      ));
+      data.add(Text("", ));
       for (var i = 0; i <= count; i++) {
         var menu = ListTile(title: Text("เมนูที่ $i",
         style: TextStyle(fontSize: 25, color: Colors.blue),
@@ -61,10 +58,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ListView.builder(
-        itemCount: 20,
+        itemCount: 2,
         itemBuilder: (BuildContext context , int index) {
+          Foodmenu fm = menu[index];
           return ListTile(
             title: Text("เมนูที่ ${index + 1}",),
+            subtitle: Text("ชื่ออาหาร: ${fm.name} ราคา: ${fm.price}"),
           );
         },
       ),
