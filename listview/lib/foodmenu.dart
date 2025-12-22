@@ -1,6 +1,8 @@
 class Foodmenu {
   String name;
-  String price;
+  int price;
+  String img;
+  String type;
 
-  Foodmenu(this.name, this.price);
+  Foodmenu(this.name, this.price, this.img, this.type);
 }
