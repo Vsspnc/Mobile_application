@@ -10,10 +10,15 @@ class InputForm extends StatefulWidget {
 
 class _InputFormState extends State<InputForm> {
   String _productName = '';
-  String _customerName = '';
+  String _productDes = '';
 
   final TextEditingController _productCon = TextEditingController();
-  final TextEditingController _customerCon = TextEditingController();
+  final TextEditingController _descon = TextEditingController();
+
+  bool? _checkBox, _listTileCheckBox = false;
+
+
+
 
   @override
   void initState() {
@@ -25,9 +30,9 @@ class _InputFormState extends State<InputForm> {
       });
     });
 
-    _customerCon.addListener(() {
+    _descon.addListener(() {
       setState(() {
-        _customerName = _customerCon.text;
+        _productDes = _descon.text;
       });
     });
   }
@@ -35,16 +40,16 @@ class _InputFormState extends State<InputForm> {
   @override
   void dispose() {
     _productCon.dispose();
-    _customerCon.dispose();
+    _descon.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("INPUT FORM")),
+      appBar: AppBar(title: const Text("Add Product detail in the form")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: [
             // Product Name
@@ -56,18 +61,43 @@ class _InputFormState extends State<InputForm> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            // Customer Name
+            // Product Description
             TextFormField(
-              controller: _customerCon,
+              controller: _descon,
               decoration: const InputDecoration(
-                labelText: 'Customer Name',
-                icon: Icon(Icons.person),
+                labelText: 'Product Description',
+                icon: Icon(Icons.pin_drop_sharp),
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
+
+            // Checkbox
+            Checkbox(
+              checkColor: Colors.white,
+              activeColor: Colors.blue,
+              tristate: true,
+              value: _checkBox,
+              onChanged: (val) {
+                setState(() {
+                  _checkBox = val;
+                });
+              },
+            ),
+
+            // checkbox 2
+            CheckboxListTile(
+              value: _listTileCheckBox,
+              title: Text("Top_Product"),
+              onChanged: (val) {
+                setState(() {
+                  _listTileCheckBox = val;
+                });
+              },
+            ),
+
 
             // Button
             OutlinedButton(
@@ -77,7 +107,7 @@ class _InputFormState extends State<InputForm> {
                   MaterialPageRoute(
                     builder: (context) => FormShopping(
                       productName: _productName,
-                      customerName: _customerName,
+                      customerName: _productDes,
                     ),
                   ),
                 );
@@ -87,8 +117,47 @@ class _InputFormState extends State<InputForm> {
 
             const SizedBox(height: 16),
             Text("Product : $_productName"),
-            Text("Customer : $_customerName"),
+            Text("Description: $_productDes"),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MytextField extends StatelessWidget {
+ const MytextField({
+  Key? key,
+  required this.fieldName,
+  required this.myController,
+  this.myIcon = Icons.verified_user_outlined,
+  this.prefixIconColor = Colors.blueAccent,
+  }) : super(key: key);
+
+  final TextEditingController myController;
+  final String fieldName;
+  final IconData myIcon;
+  final Color prefixIconColor;
+
+@override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: myController,
+      decoration: InputDecoration(
+        labelText: fieldName,
+        icon: Icon(
+          myIcon,
+          color: prefixIconColor,
+        ),
+        border: const OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.deepPurple.shade300,
+            width: 2.0,
+          ),
+        ),
+        labelStyle: const TextStyle(
+          color: Colors.deepPurple,
         ),
       ),
     );
