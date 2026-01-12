@@ -25,9 +25,19 @@ class _InputFormState extends State<InputForm> {
   int? _selectedChoice;
   ProductTypeEnum? _productTypeEnum;
 
+final List<String> _productSizeList = ['S', 'M', 'L', 'XL'];
+late String _selectedVal;
+
+  _InputFormState() {
+    _selectedVal = _productSizeList[0];
+  }
+  
+
+
   @override
   void initState() {
     super.initState();
+    _selectedVal = _productSizeList.first;
 
     _productCon.addListener(() {
       setState(() => _productName = _productCon.text);
@@ -100,44 +110,47 @@ class _InputFormState extends State<InputForm> {
               },
             ),
 
+          
+          
+
             const Divider(),
 
-            /// Radio numbers
-            const Text(
-              'Select Level',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-           ListTile( 
-            title: Text('1'), 
-            leading: Radio(value: 1, 
-            groupValue: _selectedChoice, 
-            onChanged: (value) { 
-              setState(() { 
-                _selectedChoice = 1; 
-                }); 
-              }),
-            ),
-            ListTile( 
-             title: Text('2'),
-             leading: Radio(value: 2,
-             groupValue: _selectedChoice,
-             onChanged: (value) { 
-              setState(() { 
-                _selectedChoice = 2; 
-                });
-              }),
-            ),
-            ListTile( 
-              title: Text('3'), 
-              leading: Radio(value: 3, 
-              groupValue: _selectedChoice, 
-              onChanged: (value) { 
-                setState(() { 
-                  _selectedChoice = 3; 
-                  }); 
-                }), 
-              ),
-            const Divider(),
+          //   /// Radio numbers
+          //   const Text(
+          //     'Select Level',
+          //     style: TextStyle(fontWeight: FontWeight.bold),
+          //   ),
+          //  ListTile( 
+          //   title: Text('1'), 
+          //   leading: Radio(value: 1, 
+          //   groupValue: _selectedChoice, 
+          //   onChanged: (value) { 
+          //     setState(() { 
+          //       _selectedChoice = 1; 
+          //       }); 
+          //     }),
+          //   ),
+          //   ListTile( 
+          //    title: Text('2'),
+          //    leading: Radio(value: 2,
+          //    groupValue: _selectedChoice,
+          //    onChanged: (value) { 
+          //     setState(() { 
+          //       _selectedChoice = 2; 
+          //       });
+          //     }),
+          //   ),
+          //   ListTile( 
+          //     title: Text('3'), 
+          //     leading: Radio(value: 3, 
+          //     groupValue: _selectedChoice, 
+          //     onChanged: (value) { 
+          //       setState(() { 
+          //         _selectedChoice = 3; 
+          //         }); 
+          //       }), 
+          //     ),
+          //   const Divider(),
 
            
             const Text(
@@ -162,8 +175,47 @@ class _InputFormState extends State<InputForm> {
                   _productTypeEnum = value; 
                 }); 
               }),
-           
+            const Divider(),
+            const Text(
+              'Select Product Size',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
 
+          DropdownButtonFormField<String>(
+              value: _selectedVal,
+
+              items: _productSizeList.map((e) {
+                return DropdownMenuItem<String>(
+                  value: e,
+                  child: Text(e),
+                );
+              }).toList(),
+
+              onChanged: (value) {
+                setState(() {
+                  _selectedVal = value!;
+                });
+              },
+
+              // 🔽 icon
+              icon: const Icon(
+                Icons.arrow_drop_down_circle,
+                color: Colors.deepPurple,
+              ),
+
+              // 🎨 สี dropdown
+              dropdownColor: Colors.deepPurple.shade50,
+
+              // 🧾 decoration
+              decoration: const InputDecoration(
+                labelText: "Product Sizes",
+                prefixIcon: Icon(
+                  Icons.accessibility_new_rounded,
+                  color: Colors.deepPurple,
+                ),
+                border: OutlineInputBorder(),
+              ),
+            ),
             const SizedBox(height: 24),
 
             /// Submit button
@@ -178,7 +230,11 @@ class _InputFormState extends State<InputForm> {
 
             /// Preview text
             Text("Product : $_productName"),
-            Text("Description : $_productDes"),
+            // Text("Description : $_productDes"),
+            // Text("Available : $_checkBox"),
+            // Text("Top Product : $_listTileCheckBox"),
+            // Text("Product Type : ${_productTypeEnum?.name}"),
+            Text("Product Size : $_selectedVal"),
           ],
         ),
       ),
