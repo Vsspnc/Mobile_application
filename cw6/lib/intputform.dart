@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'shopping.dart';
 
+enum ProductTypeEnum { Downloadable, Deliverable }
+
 class InputForm extends StatefulWidget {
   const InputForm({super.key});
 
@@ -14,8 +16,9 @@ class _InputFormState extends State<InputForm> {
 
   final TextEditingController _productCon = TextEditingController();
   final TextEditingController _descon = TextEditingController();
-
+  var _selectedChoice;
   bool? _checkBox, _listTileCheckBox = false;
+  ProductTypeEnum? _productTypeEnum;
 
 
 
@@ -98,6 +101,43 @@ class _InputFormState extends State<InputForm> {
               },
             ),
 
+            Radio(value: null, groupValue: null, onChanged: null),
+            RadioListTile(value: null, groupValue: null, onChanged: null),
+
+            SizedBox(height: 20),
+            myBtn(context),
+            SizedBox(height: 40.0),
+
+            ListTile(
+              title: Text('1'),
+              leading: Radio(value: 1, 
+              groupValue: _selectedChoice, 
+              onChanged: (value) {
+                setState(() {
+                  _selectedChoice = 1;
+                });
+              }),
+            ),
+            ListTile(
+              title: Text('2'),
+              leading: Radio(value: 2, 
+              groupValue: _selectedChoice, 
+              onChanged: (value) {
+                setState(() {
+                  _selectedChoice = 2;
+                });
+              }),
+            ),
+            ListTile(
+              title: Text('3'),
+              leading: Radio(value: 3, 
+              groupValue: _selectedChoice, 
+              onChanged: (value) {
+                setState(() {
+                  _selectedChoice = 3;
+                });
+              }),
+            ),
 
             // Button
             OutlinedButton(
@@ -115,11 +155,48 @@ class _InputFormState extends State<InputForm> {
               child: const Text("SUB"),
             ),
 
+            RadioListTile<ProductTypeEnum>(
+              title: Text(ProductTypeEnum.Deliverable.name),
+              value: ProductTypeEnum.Downloadable,
+              groupValue: _productTypeEnum,
+              onChanged: (val) {
+                setState(() {
+                  _productTypeEnum = val;
+                });
+              }),
+            RadioListTile<ProductTypeEnum>(
+              title: Text(ProductTypeEnum.Deliverable.name),
+              value: ProductTypeEnum.Deliverable,
+              groupValue: _productTypeEnum,
+              onChanged: (val) {
+                setState(() {
+                  _productTypeEnum = val;
+                });
+              }),
+
             const SizedBox(height: 16),
             Text("Product : $_productName"),
             Text("Description: $_productDes"),
           ],
         ),
+      ),
+    );
+  }
+  Center myBtn(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormShopping(
+                productName: _productName,
+                customerName: _productDes,
+              ),
+            ),
+          );
+        },
+        child: const Text("SUBMIT"),
       ),
     );
   }
