@@ -1,4 +1,3 @@
-// กรอกข้อมูล
 import 'package:flutter/material.dart';
 import 'result.dart';
 
@@ -26,103 +25,209 @@ class _InputPageState extends State<InputPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("กรอกข้อมูลนักศึกษา")),
+      appBar: AppBar(
+        title: const Text("กรอกข้อมูลนักศึกษา"),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(labelText: "ชื่อ - นามสกุล"),
+
+            // ===== ข้อมูลนักศึกษา =====
+            Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "ข้อมูลนักศึกษา",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        labelText: "ชื่อ - นามสกุล",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
 
-            SizedBox(height: 10),
-            Text("สาขา"),
-            RadioListTile<String>(
-              title: Text("INE"),
-              value: "INE",
-              // ignore: deprecated_member_use
-              groupValue: major,
-              // ignore: deprecated_member_use
-              onChanged: (String? value) {
-                setState(() {
-                  major = value!;
-                });
-              },
+            const SizedBox(height: 16),
+
+            // ===== สาขา =====
+            Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "สาขา",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    RadioListTile<String>(
+                      title: const Text("INE"),
+                      value: "INE",
+                      groupValue: major,
+                      onChanged: (value) {
+                        setState(() {
+                          major = value!;
+                        });
+                      },
+                    ),
+                    RadioListTile<String>(
+                      title: const Text("INET"),
+                      value: "INET",
+                      groupValue: major,
+                      onChanged: (value) {
+                        setState(() {
+                          major = value!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
 
-            RadioListTile<String>(
-              title: Text("INET"),
-              value: "INET",
-              // ignore: deprecated_member_use
-              groupValue: major,
-              // ignore: deprecated_member_use
-              onChanged: (String? value) {
-                setState(() {
-                  major = value!;
-                });
-              },
+            const SizedBox(height: 16),
+
+            // ===== รายวิชา =====
+            Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    labelText: "รายวิชา",
+                    border: OutlineInputBorder(),
+                  ),
+                  value: subject,
+                  items: subjectNames.entries.map((entry) {
+                    return DropdownMenuItem<String>(
+                      value: entry.key,
+                      child: Text(entry.value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      subject = value;
+                    });
+                  },
+                ),
+              ),
             ),
 
-            DropdownButton<String>(
-  hint: Text("เลือกรายวิชา"),
-  value: subject,
-  items: subjectNames.entries.map((entry) {
-    return DropdownMenuItem(
-      value: entry.key,        // ใช้ CS101 ภายใน
-      child: Text(entry.value) // 👈 แสดงเฉพาะชื่อวิชา
-    );
-  }).toList(),
-  onChanged: (value) {
-    setState(() {
-      subject = value;
-    });
-  },
-),
+            const SizedBox(height: 16),
 
+            // ===== คะแนน =====
+            Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Text(
+                      "คะแนน",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: keepController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "คะแนนเก็บ",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: midController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "กลางภาค",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: finalController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "ปลายภาค",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-            TextField(
-              controller: keepController,
-              decoration: InputDecoration(labelText: "คะแนนเก็บ"),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: midController,
-              decoration: InputDecoration(labelText: "กลางภาค"),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: finalController,
-              decoration: InputDecoration(labelText: "ปลายภาค"),
-              keyboardType: TextInputType.number,
-            ),
+            const SizedBox(height: 24),
 
-            SizedBox(height: 20),
+            // ===== ปุ่ม =====
             ElevatedButton(
-              child: Text("คำนวณเกรด"),
-             onPressed: () {
-  if (subject == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("กรุณาเลือกรายวิชา")),
-    );
-    return;
-  }
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                "คำนวณเกรด",
+                style: TextStyle(fontSize: 18),
+              ),
+              onPressed: () {
+                if (subject == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("กรุณาเลือกรายวิชา")),
+                  );
+                  return;
+                }
 
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ResultPage(
-        name: nameController.text,
-        major: major,
-        subject: subjectNames[subject]!, // 👈 ส่งชื่อวิชา
-        keep: int.parse(keepController.text),
-        mid: int.parse(midController.text),
-        fin: int.parse(finalController.text),
-      ),
-    ),
-  );
-},
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                      name: nameController.text,
+                      major: major,
+                      subject: subjectNames[subject]!,
+                      keep: int.parse(keepController.text),
+                      mid: int.parse(midController.text),
+                      fin: int.parse(finalController.text),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
