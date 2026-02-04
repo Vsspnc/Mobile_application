@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      title: 'User Management',
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: const MyHomePage(title: 'List Example'),
     );
   }
@@ -29,108 +27,160 @@ class MyHomePage extends StatefulWidget {
 }
 
 class Data {
-  int id;
-  String name;
-  DateTime t;
-
+  late int id;
+  late String name;
+  late DateTime t;
   Data(this.id, this.name, this.t);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String txt = "N/A";
-  int img = 0;
+  late TextEditingController _controller;
 
-  List<Data> mylist = [];
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  String txt = 'N/A';
+  List<Data> mylist = <Data>[];
+  int img = 0;
+  final List<String> _imagePaths = [
+    'assets/images/ig.png',
+    'assets/images/line.png',
+    'assets/images/avengers.png',
+    'assets/images/marvel.png',
+  ];
+
+  String _imageForId(int id) {
+    if (id < 1 || id > _imagePaths.length) {
+      return _imagePaths.first;
+    }
+    return _imagePaths[id - 1];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.deepOrange,
+        centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
+      body: Column(
+        children: [
+          SizedBox(height: 10),
+          RadioGroup(
+            groupValue: img,
+            onChanged: (int? value) {
+              setState(() {
+                img = value!;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Radio<int>(
-                  value: 1,
-                  groupValue: img,
-                  onChanged: (value) {
-                    setState(() {
-                      img = value!;
-                    });
-                  },
+                Row(
+                  children: [
+                    Radio(value: 1),
+                    const CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage('assets/images/ig.png'),
+                    ),
+                  ],
                 ),
-                const CircleAvatar(
-                  radius: 20,
-                  backgroundImage:
-                      AssetImage('assets/images/Feb 1, 2026 at 8_41 PM.png'),
-                )
+                Row(
+                  children: [
+                    Radio(value: 2),
+                    const CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage('assets/images/line.png'),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(value: 3),
+                    const CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage('assets/images/avengers.png'),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(value: 4),
+                    const CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage('assets/images/marvel.png'),
+                    ),
+                  ],
+                ),
               ],
             ),
-
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: TextField(),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  txt = "Add item Success";
-                  mylist.add(Data(img, 'Item ${mylist.length + 1}', DateTime.now()));
-                });
-              },
-              child: const Text("Add Item"),
-            ),
-
-            Text(
-              txt,
-              textScaleFactor: 2,
-            ),
-
-            SizedBox(
-              width: double.infinity,
-              height: 550,
-              child: ListView.builder(
-                itemCount: mylist.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    height: 80,
-                    child: Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      color: Colors.primaries[
-                          index % Colors.primaries.length],
-                      child: ListTile(
-                        leading: const CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage(
-                              'assets/images/Feb 1, 2026 at 8_41 PM.png'),
-                        ),
-                        title: Text("Title Text ${mylist[index].id}"
-                        ),
-                        subtitle: Text(
-                          mylist[index].t.toString()
-                        ),
-                        trailing: const Icon(Icons.delete_rounded),
-                        onTap: () {
-                          setState(() {
-                            txt = "Title Text ($index) is removed";
-                            mylist.removeAt(index);
-                          });
-                        },
-                      ),
+          ),
+          TextField(controller: _controller),
+          SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                txt = 'Add item Successfully';
+                mylist.add(
+                  Data(
+                    img,
+                    _controller.text.isEmpty ? "N/A" : _controller.text,
+                    DateTime.now(),
+                  ),
+                );
+              });
+            },
+            child: const Text('Add Item'),
+          ),
+          SizedBox(height: 15),
+          Text(txt, textScaleFactor: 2, style: TextStyle(fontSize: 12)),
+          SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              itemCount: mylist.length,
+              itemBuilder: (context, index) {
+                return SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                  );
-                },
-              ),
+                    color: Colors.primaries[index % Colors.primaries.length],
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: AssetImage(
+                          _imageForId(mylist[index].id),
+                        ),
+                      ),
+                      title: Text(mylist[index].name),
+                      subtitle: Text(mylist[index].t.toString()),
+                      trailing: const Icon(Icons.delete_rounded),
+                      onTap: () {
+                        setState(() {
+                          txt = 'Delete ${mylist[index].name} Successfully';
+                          mylist.removeAt(index);
+                        });
+                      },
+                    ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
