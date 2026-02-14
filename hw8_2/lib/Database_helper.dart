@@ -28,32 +28,28 @@ class DatabaseHelper {
   Future<void> _createDb(Database db, int version) async {
     await db.execute('''
       CREATE TABLE user (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT,
-  email TEXT,
-  pwd TEXT,
-  weight REAL,
-  height REAL,
-  bmi REAL,
-  bmiType TEXT,
-  targetWeight REAL
-)
-    ''');
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        email TEXT,
+        pwd TEXT,
+        weight REAL,
+        height REAL,
+        bmi REAL,
+        bmiType TEXT,
+        targetWeight REAL
+      )
+      ''');
   }
 
-  Future<void> _upgradeDb(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 3) {
-      try {
-        await db.execute('ALTER TABLE user ADD COLUMN bmi REAL');
-      } catch (_) {}
-
-      try {
-        await db.execute('ALTER TABLE user ADD COLUMN bmiType TEXT');
-      } catch (_) {}
-
-      await updateAllBmi();
-    }
+ Future<void> _upgradeDb(Database db, int oldVersion, int newVersion) async {
+  if (oldVersion < 2) {
+    await db.execute(
+      'ALTER TABLE user ADD COLUMN targetWeight REAL'
+    );
   }
+}
+
+
 
   // INSERT
   Future<int> insertUser(User user) async {
